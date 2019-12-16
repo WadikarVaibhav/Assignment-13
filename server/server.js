@@ -28,7 +28,7 @@ mongoose.connect(dbPath, { useNewUrlParser: true, useUnifiedTopology: true, useF
 app.get('/product/get/', async (req, res) => {
     var products = {};
     var data = await Product.find({});
-    data.forEach((value) => {
+    data.map(value => {
         products[value.id] = value.product;
     });
     res.send(products);
@@ -41,7 +41,6 @@ app.post('/product/create/', async (req, res) => {
     try {
         var product = new Product(req.body);
         await product.save();
-        console.log("Saved");
         res.sendStatus(200);
     } catch (error) {
         res.sendStatus(500);
@@ -54,11 +53,9 @@ app.post('/product/create/', async (req, res) => {
 app.put('/product/update/:id', async (req, res) => {
     try {
         var reqestId = req.params.id;
-        console.log(req.body)
         await Product.findOneAndUpdate({ id: reqestId }, req.body);
         res.sendStatus(200);
     } catch (error) {
-        console.log(error);
         res.sendStatus(500);
     }
 });
